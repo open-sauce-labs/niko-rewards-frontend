@@ -1,0 +1,23 @@
+.wallet-button,
+.navigation .wallet-button {
+	border-radius: 4px;
+	padding: 0.2rem 1rem;
+	margin: 0 1rem;
+	width: 180px;
+
+	span > img {
+		width: 20px;
+		height: 20px;
+	}
+}
+
+.MuiList-root .MuiMenuItem-root .wallet-button {
+	background: none;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 2px solid black;
+	box-shadow: none;
+	margin: none;
+	min-width: unset;
+}

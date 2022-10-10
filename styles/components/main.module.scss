@@ -1,0 +1,12 @@
+@use '../mixins/animations.module.scss' as *;
+@use '../mixins/common.module.scss' as *;
+
+.main {
+	@include defaultFadeIn;
+	min-height: 100vh;
+	margin: 2rem;
+}
+
+.main-content {
+	@include centeredColumn;
+}

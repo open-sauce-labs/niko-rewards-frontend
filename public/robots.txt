@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://holders.narentines.com
+
+# Sitemaps
+Sitemap: https://holders.narentines.com/sitemap.xml
