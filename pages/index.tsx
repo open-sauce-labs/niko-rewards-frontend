@@ -78,7 +78,11 @@ const Home: NextPage = () => {
 							})}
 						</Grid>
 						<Grid item xs={12} sm={6} md={8}>
-							{!me?.level && <Typography>You are not eligible for any rewards</Typography>}
+							{!me?.level && (
+								<Typography variant='h5' py={4}>
+									You are not eligible for any rewards
+								</Typography>
+							)}
 							{me?.level === CollectorLevel.Bronze && (
 								<Box>
 									<Typography variant='h5' component='p'>
@@ -137,6 +141,17 @@ const Home: NextPage = () => {
 											</Form>
 										)}
 									</Formik>
+									<Typography variant='subtitle2' fontStyle='italic' py={2}>
+										If you have any issues DM us on&nbsp;
+										<a href='https://twitter.com/StudioNX' target='_blank' rel='noreferrer'>
+											twitter
+										</a>
+										&nbsp; or mail to&nbsp;
+										<a href='mailto:adam@studionx.com' target='_blank' rel='noreferrer'>
+											adam@studionx.com
+										</a>
+										&nbsp; for verification
+									</Typography>
 								</Box>
 							)}
 						</Grid>
