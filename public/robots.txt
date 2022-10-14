@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://holders.narentines.com
+Host: https://rewards.artofniko.com
 
 # Sitemaps
-Sitemap: https://holders.narentines.com/sitemap.xml
+Sitemap: https://rewards.artofniko.com/sitemap.xml
