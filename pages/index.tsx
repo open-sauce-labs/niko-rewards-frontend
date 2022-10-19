@@ -13,6 +13,7 @@ import { SchemaOf } from 'yup'
 import * as yup from 'yup'
 import { Container } from '@mui/system'
 import { useAuth } from '@open-sauce/solomon'
+import { useFetchApp } from 'api/app'
 
 const simpleValidationSchema: SchemaOf<SimpleRequest> = yup.object({
 	email: yup.string().email().required().required('Required field'),
@@ -36,6 +37,7 @@ const complexInitialValues: ComplexRequest = {
 
 const Home: NextPage = () => {
 	const { data: me } = useFetchMe()
+	const { data: app } = useFetchApp()
 	const { data: rewards } = useFetchRewards()
 	const { mutateAsync: submitFormAsync, isLoading } = useShippingForm()
 	const { isAuthenticated } = useAuth()
@@ -44,6 +46,8 @@ const Home: NextPage = () => {
 
 	const initialValues = simpleForm ? simpleInitialValues : complexInitialValues
 	const validationSchema = simpleForm ? simpleValidationSchema : complexValidationSchema
+
+	console.log(app)
 
 	return (
 		<>
@@ -89,7 +93,7 @@ const Home: NextPage = () => {
 							)}
 							{isAuthenticated && !me?.level && (
 								<Typography variant='h5' py={4}>
-									You are not eligible for any rewards
+									You are not eligible for a reward
 								</Typography>
 							)}
 							{me?.level === CollectorLevel.Bronze && (
