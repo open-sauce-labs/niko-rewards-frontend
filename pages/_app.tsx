@@ -7,11 +7,11 @@ import { ThemeProvider, CssBaseline } from '@mui/material'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { network, endpoint } from 'constants/environment'
 import { AuthProvider, wallets } from '@open-sauce/solomon'
+import ToastProvider from 'providers/ToastProvider'
 import theme from 'styles/theme'
 import Head from 'next/head'
 import http from 'api/http'
 import 'styles/app.scss'
-import ToastProvider from 'providers/ToastProvider'
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const [queryClient] = useState(() => new QueryClient())

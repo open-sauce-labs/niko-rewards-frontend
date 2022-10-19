@@ -12,6 +12,7 @@ import { SimpleRequest, ComplexRequest, useShippingForm } from 'api/wallet/queri
 import { SchemaOf } from 'yup'
 import * as yup from 'yup'
 import { Container } from '@mui/system'
+import { useAuth } from '@open-sauce/solomon'
 
 const simpleValidationSchema: SchemaOf<SimpleRequest> = yup.object({
 	email: yup.string().email().required().required('Required field'),
@@ -37,6 +38,7 @@ const Home: NextPage = () => {
 	const { data: me } = useFetchMe()
 	const { data: rewards } = useFetchRewards()
 	const { mutateAsync: submitFormAsync, isLoading } = useShippingForm()
+	const { isAuthenticated } = useAuth()
 	const simpleForm = me?.level && me?.level === CollectorLevel.Bronze
 	const complexForm = me?.level && !simpleForm
 
@@ -50,35 +52,42 @@ const Home: NextPage = () => {
 			<Main className='main'>
 				<Container maxWidth='lg'>
 					<Grid container spacing={4} flexDirection={{ xs: 'column-reverse', sm: 'row' }}>
-						<Grid item xs={12} sm={6} md={4}>
-							{rewards?.map((reward) => {
-								const matchLevel = reward.level === me?.level
+						{isAuthenticated && (
+							<Grid item xs={12} sm={6} md={4}>
+								{rewards?.map((reward) => {
+									const matchLevel = reward.level === me?.level
 
-								return (
-									<Card
-										key={reward.level}
-										style={{
-											marginBottom: '1rem',
-											boxShadow: `2px 2px ${matchLevel ? '#276d25' : 'black'}`,
-											border: `2px solid ${matchLevel ? '#0d340c' : 'black'}`,
-											backgroundColor: `rgba(255, 255, 255, ${matchLevel ? '0.95' : '0.65'})`,
-											backgroundImage: 'unset',
-										}}
-									>
-										{reward && (
-											<Box textAlign='center' px={2} pb={2} pt={1}>
-												<Typography variant='h5' component='h2' color={matchLevel ? '#276d25' : undefined}>
-													{reward.name}
-												</Typography>
-												<Typography variant='body2'>{reward.description}</Typography>
-											</Box>
-										)}
-									</Card>
-								)
-							})}
-						</Grid>
-						<Grid item xs={12} sm={6} md={8}>
-							{!me?.level && (
+									return (
+										<Card
+											key={reward.level}
+											style={{
+												marginBottom: '1rem',
+												boxShadow: `2px 2px ${matchLevel ? '#276d25' : 'black'}`,
+												border: `2px solid ${matchLevel ? '#0d340c' : 'black'}`,
+												backgroundColor: `rgba(255, 255, 255, ${matchLevel ? '0.95' : '0.65'})`,
+												backgroundImage: 'unset',
+											}}
+										>
+											{reward && (
+												<Box textAlign='center' px={2} pb={2} pt={1}>
+													<Typography variant='h5' component='h2' color={matchLevel ? '#276d25' : undefined}>
+														{reward.name}
+													</Typography>
+													<Typography variant='body2'>{reward.description}</Typography>
+												</Box>
+											)}
+										</Card>
+									)
+								})}
+							</Grid>
+						)}
+						<Grid item xs={12} sm={isAuthenticated ? 6 : 12} md={isAuthenticated ? 8 : 12}>
+							{!isAuthenticated && (
+								<Typography variant='h5' py={4} textAlign='center'>
+									Please connect your wallet in order to apply for a reward
+								</Typography>
+							)}
+							{isAuthenticated && !me?.level && (
 								<Typography variant='h5' py={4}>
 									You are not eligible for any rewards
 								</Typography>
