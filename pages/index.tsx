@@ -4,7 +4,7 @@ import Footer from 'components/layout/Footer'
 import Main from 'components/layout/Main'
 import { useFetchMe } from 'api/wallet'
 import { useFetchRewards } from 'api/reward'
-import { Box, Button, Card, Grid, StandardTextFieldProps, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, Grid, StandardTextFieldProps, TextField, Typography, CircularProgress } from '@mui/material'
 import { CollectorLevel } from 'enums/collectorLevel'
 // import NikoComic from 'components/NikoComic'
 import { Formik, Form, Field, FieldAttributes, FormikErrors, FormikTouched } from 'formik'
@@ -37,17 +37,16 @@ const complexInitialValues: ComplexRequest = {
 
 const Home: NextPage = () => {
 	const { data: me } = useFetchMe()
-	const { data: app } = useFetchApp()
+	const { isFetching: isFetchingApp } = useFetchApp()
 	const { data: rewards } = useFetchRewards()
 	const { mutateAsync: submitFormAsync, isLoading } = useShippingForm()
 	const { isAuthenticated } = useAuth()
-	const simpleForm = me?.level && me?.level === CollectorLevel.Bronze
-	const complexForm = me?.level && !simpleForm
+
+	const simpleForm = me?.level && me?.level !== CollectorLevel.Bronze
+	const complexForm = simpleForm && me?.level !== CollectorLevel.Silver
 
 	const initialValues = simpleForm ? simpleInitialValues : complexInitialValues
 	const validationSchema = simpleForm ? simpleValidationSchema : complexValidationSchema
-
-	console.log(app)
 
 	return (
 		<>
@@ -55,6 +54,15 @@ const Home: NextPage = () => {
 
 			<Main className='main'>
 				<Container maxWidth='lg'>
+					{isFetchingApp && (
+						<Box textAlign='center' width='100%'>
+							<Typography>Waking up our servers</Typography>
+							<Typography variant='body2' fontStyle='italic' pb={2}>
+								Please wait
+							</Typography>
+							<CircularProgress />
+						</Box>
+					)}
 					<Grid container spacing={4} flexDirection={{ xs: 'column-reverse', sm: 'row' }}>
 						{isAuthenticated && (
 							<Grid item xs={12} sm={6} md={4}>
