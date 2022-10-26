@@ -74,9 +74,10 @@ const Home: NextPage = () => {
 											key={reward.level}
 											style={{
 												marginBottom: '1rem',
-												boxShadow: `2px 2px ${matchLevel ? '#276d25' : 'black'}`,
-												border: `2px solid ${matchLevel ? '#0d340c' : 'black'}`,
-												backgroundColor: `rgba(255, 255, 255, ${matchLevel ? '0.95' : '0.65'})`,
+												boxShadow: matchLevel ? '4px 4px  #276d25' : '2px 2px  black',
+												borderWidth: '2px',
+												borderColor: matchLevel ? '#0d340c' : 'black',
+												backgroundColor: matchLevel ? 'rgba(250, 255, 250, 1)' : 'rgba(255, 255, 255, 0.6)',
 												backgroundImage: 'unset',
 											}}
 										>
@@ -157,7 +158,7 @@ const Home: NextPage = () => {
 												)}
 
 												<Button type='submit' variant='contained' color='primary' disabled={isLoading} fullWidth>
-													Confim
+													Confirm
 												</Button>
 											</Form>
 										)}
@@ -168,8 +169,8 @@ const Home: NextPage = () => {
 											twitter
 										</a>
 										&nbsp; or mail to&nbsp;
-										<a href='mailto:adam@studionx.com' target='_blank' rel='noreferrer'>
-											adam@studionx.com
+										<a href='mailto:katie@studionx.com' target='_blank' rel='noreferrer'>
+											katie@studionx.com
 										</a>
 										&nbsp; for verification
 									</Typography>
