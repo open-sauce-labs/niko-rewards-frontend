@@ -5,7 +5,7 @@ import InstagramIcon from 'public/assets/vector-icons/instagram-icon.svg'
 import logoImage from 'public/assets/logo.png'
 import { attributes as footer } from 'content/footer.md'
 import { attributes as company } from 'content/company.md'
-import Image from 'next/future/image'
+import Image from 'next/image'
 
 const Footer: React.FC<BoxProps> = (props) => {
 	return (

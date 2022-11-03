@@ -3,8 +3,12 @@ import { ToolbarProps, Toolbar, Button, Hidden, Box } from '@mui/material'
 import HomeIcon from 'public/assets/vector-icons/home-icon.svg'
 import TwitterIcon from 'public/assets/vector-icons/twitter-icon.svg'
 import InstagramIcon from 'public/assets/vector-icons/instagram-icon.svg'
-// import { attributes as navigation } from 'content/navigation.md'
-import { WalletMultiButton } from '@solana/wallet-adapter-material-ui'
+import dynamic from 'next/dynamic'
+
+const WalletMultiButtonDynamic = dynamic(
+	async () => (await import('@solana/wallet-adapter-material-ui')).WalletMultiButton,
+	{ ssr: false }
+)
 
 const Navigation: React.FC<ToolbarProps> = (props) => {
 	return (
@@ -37,7 +41,7 @@ const Navigation: React.FC<ToolbarProps> = (props) => {
 						<TwitterIcon />
 					</Button>
 				</Hidden>
-				<WalletMultiButton className='wallet-button' />
+				<WalletMultiButtonDynamic className='wallet-button' />
 			</Box>
 		</Toolbar>
 	)
