@@ -4,7 +4,7 @@ import Footer from 'components/layout/Footer'
 import Main from 'components/layout/Main'
 import { useFetchMe } from 'api/wallet'
 import { useFetchRewards } from 'api/reward'
-import { Box, Button, Card, Grid, StandardTextFieldProps, TextField, Typography, CircularProgress } from '@mui/material'
+import { Box, Button, Card, Grid, StandardTextFieldProps, TextField, Typography } from '@mui/material'
 import { CollectorLevel } from 'enums/collectorLevel'
 import { Formik, Form, Field, FieldAttributes, FormikErrors, FormikTouched } from 'formik'
 import { SimpleRequest, ComplexRequest, useShippingForm } from 'api/wallet/queries/useShippingForm'
@@ -12,7 +12,8 @@ import { SchemaOf } from 'yup'
 import * as yup from 'yup'
 import { Container } from '@mui/system'
 import { useAuth } from '@open-sauce/solomon'
-import { useFetchApp } from 'api/app'
+import { Role } from 'enums/role'
+import { useMemo } from 'react'
 
 const simpleValidationSchema: SchemaOf<SimpleRequest> = yup.object({
 	email: yup.string().email().required().required('Required field'),
@@ -36,13 +37,18 @@ const complexInitialValues: ComplexRequest = {
 
 const Home: NextPage = () => {
 	const { data: me } = useFetchMe()
-	const { isFetching: isFetchingApp } = useFetchApp()
 	const { data: rewards } = useFetchRewards()
 	const { mutateAsync: submitFormAsync, isLoading } = useShippingForm()
 	const { isAuthenticated } = useAuth()
 
-	const simpleForm = me?.level && me?.level !== CollectorLevel.Bronze
-	const complexForm = simpleForm && me?.level !== CollectorLevel.Silver
+	const level = useMemo(() => {
+		if (me?.role === Role.Superadmin) {
+			return CollectorLevel.Silver
+		} else return me?.level
+	}, [me])
+
+	const simpleForm = level && level !== CollectorLevel.Bronze
+	const complexForm = simpleForm && level !== CollectorLevel.Silver
 
 	const initialValues = simpleForm ? simpleInitialValues : complexInitialValues
 	const validationSchema = simpleForm ? simpleValidationSchema : complexValidationSchema
@@ -53,20 +59,11 @@ const Home: NextPage = () => {
 
 			<Main className='main'>
 				<Container maxWidth='lg'>
-					{isFetchingApp && (
-						<Box textAlign='center' width='100%'>
-							<Typography>Waking up our servers</Typography>
-							<Typography variant='body2' fontStyle='italic' pb={2}>
-								Please wait
-							</Typography>
-							<CircularProgress />
-						</Box>
-					)}
 					<Grid container spacing={4} flexDirection={{ xs: 'column-reverse', sm: 'row' }}>
 						{isAuthenticated && (
 							<Grid item xs={12} sm={6} md={4}>
 								{rewards?.map((reward) => {
-									const matchLevel = reward.level === me?.level
+									const matchLevel = reward.level === level
 
 									return (
 										<Card
@@ -99,12 +96,12 @@ const Home: NextPage = () => {
 									Please connect your wallet in order to apply for a reward
 								</Typography>
 							)}
-							{isAuthenticated && !me?.level && (
+							{isAuthenticated && !level && (
 								<Typography variant='h5' py={4}>
 									You are not eligible for a reward
 								</Typography>
 							)}
-							{me?.level === CollectorLevel.Bronze && (
+							{level === CollectorLevel.Bronze && (
 								<Box>
 									<Typography variant='h5' component='p'>
 										Congrats! 🎉

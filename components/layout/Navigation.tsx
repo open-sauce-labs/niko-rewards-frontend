@@ -4,6 +4,8 @@ import HomeIcon from 'public/assets/vector-icons/home-icon.svg'
 import TwitterIcon from 'public/assets/vector-icons/twitter-icon.svg'
 import InstagramIcon from 'public/assets/vector-icons/instagram-icon.svg'
 import dynamic from 'next/dynamic'
+import { useFetchMe } from 'api/wallet'
+import { Role } from 'enums/role'
 
 const WalletMultiButtonDynamic = dynamic(
 	async () => (await import('@solana/wallet-adapter-material-ui')).WalletMultiButton,
@@ -11,12 +13,19 @@ const WalletMultiButtonDynamic = dynamic(
 )
 
 const Navigation: React.FC<ToolbarProps> = (props) => {
+	const { data: me } = useFetchMe()
+
 	return (
 		<Toolbar component='nav' className='navigation' {...props}>
 			<Box className='navigation-items navigation-items--left'>
 				<Button variant='contained' href='https://www.artofniko.com/' rel='noreferrer' target='_blank'>
 					<HomeIcon />
 				</Button>
+				{me?.role === Role.Superadmin && (
+					<Button variant='contained' href='/comic'>
+						<img style={{ height: '100%', width: 'auto' }} alt='comic' src='/assets/comic-book.png' />
+					</Button>
+				)}
 			</Box>
 
 			<Box className='navigation-items navigation-items--right'>
