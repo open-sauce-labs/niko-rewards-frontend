@@ -12,9 +12,6 @@ import { SchemaOf } from 'yup'
 import * as yup from 'yup'
 import { Container } from '@mui/system'
 import { useAuth } from '@open-sauce/solomon'
-import { Role } from 'enums/role'
-import { useMemo } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
 
 const simpleValidationSchema: SchemaOf<SimpleRequest> = yup.object({
 	email: yup.string().email().required().required('Required field'),
@@ -37,20 +34,10 @@ const complexInitialValues: ComplexRequest = {
 }
 
 const Home: NextPage = () => {
-	let { data: me } = useFetchMe()
+	const { data: me } = useFetchMe()
 	const { data: rewards } = useFetchRewards()
 	const { mutateAsync: submitFormAsync, isLoading } = useShippingForm()
 	const { isAuthenticated } = useAuth()
-	const { publicKey } = useWallet()
-
-	if (publicKey?.toString() === 'HyPFNtmwtSEjwPWch1a9juvZ9wERemXzDgtymGn2KUh7') {
-		me = {
-			address: 'HyPFNtmwtSEjwPWch1a9juvZ9wERemXzDgtymGn2KUh7',
-			role: Role.Superadmin,
-			level: CollectorLevel.Silver,
-			rewards: [],
-		}
-	}
 
 	const simpleForm = me?.level && me?.level !== CollectorLevel.Bronze
 	const complexForm = simpleForm && me?.level !== CollectorLevel.Silver

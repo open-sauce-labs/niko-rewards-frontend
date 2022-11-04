@@ -1,9 +1,9 @@
-import http from 'api/http'
+import { useEffect } from 'react'
 import { useAuth } from '@open-sauce/solomon'
 import { walletKeys, WALLET_QUERY_KEYS } from 'api/wallet'
 import { Wallet } from 'models/wallet'
-import { useEffect } from 'react'
 import { useQuery } from 'react-query'
+import http from 'api/http'
 
 const { WALLET, GET, ME } = WALLET_QUERY_KEYS
 
